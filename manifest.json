@@ -2,12 +2,25 @@
   "name": "TNB Electricity Cost Calculator V2",
   "short_name": "TNB Calc V2",
   "description": "Quickly estimate electricity costs in Malaysia based on Amp, Minutes, Rate, and Voltage.",
+  "lang": "en",
+  "dir": "ltr",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0046ad",
   "orientation": "portrait",
   "icons": [
+    {
+      "src": "./assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
     {
       "src": "./assets/favicon-32x32.png",
       "sizes": "32x32",
