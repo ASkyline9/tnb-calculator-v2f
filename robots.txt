@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yourusername.github.io/tnb-calculator-v2/sitemap.xml
