@@ -17,7 +17,7 @@ const urlsToCache = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("Opened cache");
+      console.log("Opened cache and adding assets");
       return cache.addAll(urlsToCache);
     })
   );
@@ -39,12 +39,22 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch requests
+// Fetch requests with network fallback
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      // Serve from cache if available, else fetch from network
-      return response || fetch(event.request);
+      if (response) return response;
+      return fetch(event.request)
+        .then((networkResponse) => {
+          // Cache the new request for offline use
+          return caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          // Optional: return offline fallback page/image if available
+        });
     })
   );
 });
