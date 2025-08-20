@@ -2,45 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TNB Electricity Cost Calculator V2</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- Embedded Favicon Base64 -->
-  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAkUlEQVR4Ae3YsQkAIAwDwXv/P7+ySiQQI4iuOYAhPNNmkSiaa0F/wPx+rfIYhMIRCKRCKRCKRCKRCKRCKRCKRCKRCKRCKRCKRCKRCKRCKRKKSjOf8OqzxB0KWvAGRlz4q5k84C+LwAAAABJRU5ErkJggg==" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon-64x64.png">
 </head>
 <body>
-  <header>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAABGklEQVR4Ae2WMQ7CQAxFZ2vH+P7+X3BNJKEQo3Xt7IgtqU2SUyCK1O0IBPjiRgsHMkL1EKJN368aA2zZeMJ07WIwj0dkqkKpEKhEKtEKhEKtEKhEKtEKhEKtEKhEKtEKhELp3x/5+GfD0EO4frPVaZNOALjfSCJqVxKpRKpRKpRKpRKpRKpRKpRKpRKpRKpRKpRKpRKpRKpMo9nXtR8vwR8n3n91rGPqVX77cxU2uj6QZMxKKpRKpRKpRKpRKpRKpRKpRs22/hVQBXV8NQAAAABJRU5ErkJggg==" alt="TNB Logo" class="logo">
-    <h1>TNB Electricity Cost Calculator</h1>
-    <p>Malaysia Residential Tariff (2025)</p>
-  </header>
+  <div class="app-container">
+    <header>
+      <h1>TNB Electricity Cost Calculator V2</h1>
+      <p class="subtitle">Quickly calculate electricity cost based on Amp, Minutes, Rate & Voltage.</p>
+    </header>
 
-  <main class="container">
-    <div class="card">
-      <h2>New Entry</h2>
-      <label for="usage">Monthly Usage (kWh):</label>
-      <input type="number" id="usage" placeholder="e.g. 350">
+    <main>
+      <form id="calc-form">
+        <label for="amp">Amp (A)</label>
+        <input type="number" step="0.01" id="amp" placeholder="e.g. 0.08" required>
 
-      <button onclick="calculateBill()">Calculate</button>
+        <label for="minutes">Minutes</label>
+        <input type="number" step="1" id="minutes" placeholder="e.g. 12" required>
+
+        <label for="rate">TNB Rate (RM/kWh)</label>
+        <input type="number" step="0.01" id="rate" value="0.27" required>
+
+        <label for="voltage">Voltage (V)</label>
+        <input type="number" id="voltage" value="240" required>
+
+        <button type="submit" class="btn">Calculate</button>
+      </form>
+
+      <div id="result" class="result-box"></div>
+
+      <section id="history-section" class="history hidden">
+        <h2>Calculation History</h2>
+        <ul id="history-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <nav>
+        <button id="history-btn">History</button>
+        <button id="about-btn">About</button>
+        <button id="clear-btn">Clear History</button>
+      </nav>
+    </footer>
+  </div>
+
+  <div id="about-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>About</h2>
+      <p>This calculator helps you estimate electricity costs using Amp, Time, Rate, and Voltage. Built as TNB Calculator V2 with improved interface and history feature.</p>
+      <button id="close-about">Close</button>
     </div>
-
-    <div class="card" id="resultCard" style="display:none;">
-      <h2>Bill Result</h2>
-      <p id="result"></p>
-    </div>
-
-    <div class="card">
-      <h2>History</h2>
-      <ul id="history"></ul>
-      <button class="clear-btn" onclick="clearHistory()">Clear History</button>
-    </div>
-  </main>
-
-  <footer>
-    <button class="install-btn" onclick="installApp()">Install App</button>
-    <p>© 2025 by aa.skyline99@gmail.com • Design assisted by ChatGPT • Version 2.0</p>
-  </footer>
+  </div>
 
   <script src="script.js"></script>
 </body>
