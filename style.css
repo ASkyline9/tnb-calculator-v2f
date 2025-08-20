@@ -42,7 +42,7 @@ header h1 {
 
 .subtitle {
   font-size: 0.9rem;
-  color: #DE3314; /* TNB Official Red */
+  color: #DE3314; /* TNB Red */
 }
 
 form {
@@ -164,6 +164,22 @@ footer p {
   color: #475569;
   margin: 0;
   font-size: 0.8rem;
+}
+
+/* Install Button */
+#installBtn {
+  background-color: #005DAA; /* TNB Blue */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  margin-top: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#installBtn:hover {
+  background-color: #DE3314; /* TNB Red */
 }
 
 .hidden {

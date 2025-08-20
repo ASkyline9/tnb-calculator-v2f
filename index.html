@@ -36,6 +36,7 @@
 
     <div class="tnb-rates">
       <h2>TNB Rates (July 2025)</h2>
+      <!-- You can add rates table here later -->
     </div>
 
     <div class="history">
@@ -60,6 +61,7 @@
         <button type="button">Contact</button>
       </nav>
       <p>&copy; 2025 TNB Calculator V3</p>
+      <button id="installBtn" class="hidden">Install App</button>
     </footer>
   </div>
 
@@ -68,7 +70,9 @@
     const resultBox = document.getElementById('resultBox');
     const resultText = document.getElementById('resultText');
     const historyTable = document.querySelector('#historyTable tbody');
+    const installBtn = document.getElementById('installBtn');
 
+    // Calculator logic
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -100,6 +104,24 @@
         <td>RM ${cost.toFixed(2)}</td>
       `;
       historyTable.prepend(row);
+    });
+
+    // PWA Install Button logic
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.remove('hidden');
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          installBtn.classList.add('hidden');
+        });
+      }
     });
   </script>
 </body>
