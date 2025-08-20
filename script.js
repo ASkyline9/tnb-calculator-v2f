@@ -1,76 +1,87 @@
-const form = document.getElementById("calc-form");
-const resultBox = document.getElementById("result");
-const historySection = document.getElementById("history-section");
-const historyList = document.getElementById("history-list");
-
-const historyBtn = document.getElementById("history-btn");
-const clearBtn = document.getElementById("clear-btn");
-const aboutBtn = document.getElementById("about-btn");
-const aboutModal = document.getElementById("about-modal");
-const closeAbout = document.getElementById("close-about");
-
-// Load history from localStorage
-let history = JSON.parse(localStorage.getItem("tnbHistory")) || [];
-
-function saveHistory() {
-  localStorage.setItem("tnbHistory", JSON.stringify(history));
-}
-
-function renderHistory() {
-  historyList.innerHTML = "";
-  history.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    historyList.appendChild(li);
-  });
-}
-
-form.addEventListener("submit", e => {
+document.getElementById("calcForm").addEventListener("submit", function(e) {
   e.preventDefault();
+
   const amp = parseFloat(document.getElementById("amp").value);
   const minutes = parseFloat(document.getElementById("minutes").value);
   const rate = parseFloat(document.getElementById("rate").value);
   const voltage = parseFloat(document.getElementById("voltage").value);
 
   if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-    resultBox.textContent = "Please enter valid numbers.";
+    alert("Please enter valid numbers in all fields.");
     return;
   }
 
-  // Calculation
-  const power = amp * voltage; // Watts
-  const kWh = (power * (minutes / 60)) / 1000;
+  // Formula: kWh = (Amp × Voltage × Hours) / 1000
+  const hours = minutes / 60;
+  const kWh = (amp * voltage * hours) / 1000;
   const cost = kWh * rate;
 
-  const output = `Usage: ${kWh.toFixed(4)} kWh | Cost: RM ${cost.toFixed(4)}`;
-  resultBox.textContent = output;
+  const resultBox = document.getElementById("result");
+  resultBox.textContent = `Estimated Cost: RM ${cost.toFixed(4)}`;
+  resultBox.classList.remove("hidden");
 
   // Save to history
-  history.unshift(output);
-  if (history.length > 10) history.pop();
+  addToHistory(amp, minutes, rate, voltage, cost);
+});
+
+// Add entry to history table
+function addToHistory(amp, minutes, rate, voltage, cost) {
+  const tableBody = document.querySelector("#historyTable tbody");
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+    <td>${amp}</td>
+    <td>${minutes}</td>
+    <td>${rate}</td>
+    <td>${voltage}</td>
+    <td>RM ${cost.toFixed(4)}</td>
+  `;
+
+  tableBody.appendChild(row);
+
   saveHistory();
-  renderHistory();
+}
 
-  // Clear inputs except rate & voltage
-  document.getElementById("amp").value = "";
-  document.getElementById("minutes").value = "";
-});
+// Save history to localStorage
+function saveHistory() {
+  const rows = [];
+  document.querySelectorAll("#historyTable tbody tr").forEach(tr => {
+    const cols = tr.querySelectorAll("td");
+    rows.push({
+      amp: cols[0].textContent,
+      minutes: cols[1].textContent,
+      rate: cols[2].textContent,
+      voltage: cols[3].textContent,
+      cost: cols[4].textContent
+    });
+  });
+  localStorage.setItem("calcHistory", JSON.stringify(rows));
+}
 
-historyBtn.addEventListener("click", () => {
-  historySection.classList.toggle("hidden");
-  renderHistory();
-});
+// Load history from localStorage
+function loadHistory() {
+  const history = JSON.parse(localStorage.getItem("calcHistory")) || [];
+  const tableBody = document.querySelector("#historyTable tbody");
+  tableBody.innerHTML = "";
 
-clearBtn.addEventListener("click", () => {
-  history = [];
-  saveHistory();
-  renderHistory();
-});
+  history.forEach(entry => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${entry.amp}</td>
+      <td>${entry.minutes}</td>
+      <td>${entry.rate}</td>
+      <td>${entry.voltage}</td>
+      <td>${entry.cost}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
 
-aboutBtn.addEventListener("click", () => {
-  aboutModal.classList.remove("hidden");
-});
+// Clear history
+function clearHistory() {
+  localStorage.removeItem("calcHistory");
+  document.querySelector("#historyTable tbody").innerHTML = "";
+}
 
-closeAbout.addEventListener("click", () => {
-  aboutModal.classList.add("hidden");
-});
+// Load history on page load
+window.onload = loadHistory;

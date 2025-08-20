@@ -29,6 +29,12 @@ header {
   margin-bottom: 20px;
 }
 
+header img.logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 10px;
+}
+
 header h1 {
   font-size: 1.5rem;
   color: #0f172a;
@@ -83,11 +89,14 @@ footer {
   border-top: 1px solid #e2e8f0;
   padding-top: 10px;
   text-align: center;
+  font-size: 0.8rem;
+  color: #475569;
 }
 
 footer nav {
   display: flex;
   justify-content: space-around;
+  margin-bottom: 10px;
 }
 
 footer button {
@@ -102,21 +111,31 @@ footer button:hover {
   text-decoration: underline;
 }
 
+/* History Section */
 .history {
   margin-top: 20px;
 }
 
-.history ul {
-  list-style: none;
+.history table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 10px;
+  font-size: 0.9rem;
 }
 
-.history li {
-  background: #f1f5f9;
+.history th, .history td {
+  border: 1px solid #cbd5e1;
   padding: 8px;
-  border-radius: 6px;
-  margin-bottom: 6px;
-  font-size: 0.9rem;
+  text-align: center;
+}
+
+.history th {
+  background: #e2e8f0;
+  font-weight: bold;
+}
+
+.history tr:nth-child(even) {
+  background: #f8fafc;
 }
 
 /* Modal */
