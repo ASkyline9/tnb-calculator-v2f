@@ -9,7 +9,6 @@
 <body>
   <div class="app-container">
     <header>
-      <!-- Corrected logo path -->
       <img src="assets/favicon-64x64.png" alt="TNB Logo" class="logo">
       <h1>TNB Electricity Cost Calculator</h1>
       <p class="subtitle">Quickly Calculate Your Electricity Cost (Malaysia)</p>
@@ -36,7 +35,7 @@
     </div>
 
     <div class="tnb-rates">
-      <h2>TNB Rates (July 2025)</h2>
+      <h2 id="openRates">TNB Rates (July 2025)</h2>
     </div>
 
     <div class="history">
@@ -56,13 +55,26 @@
     </div>
 
     <footer>
-      <p>Version 2.0.0 | Developed by <a href="mailto:aa.skyline99@gmail.com">aa.skyline99@gmail.com</a><br>
-      Design assisted by ChatGPT | Date: 20 August 2025<br>
-      &copy; 2025 All Rights Reserved.</p>
+      <nav>
+        <button type="button" id="installBtn" style="display:none;">Install App</button>
+        <button type="button">About</button>
+        <button type="button">Contact</button>
+      </nav>
+      <p>&copy; 2025 Version 2.0.0 — Developed by <a href="mailto:aa.skyline99@gmail.com">aa.skyline99@gmail.com</a>, 
+      Design assisted by ChatGPT. Date: 20 August 2025. All Rights Reserved.</p>
     </footer>
   </div>
 
+  <!-- Modal for TNB Rates -->
+  <div id="ratesModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="assets/tnb-rates.png" alt="TNB Rates July 2025">
+    </div>
+  </div>
+
   <script>
+    // === Calculation Logic ===
     const form = document.getElementById('calcForm');
     const resultBox = document.getElementById('resultBox');
     const resultText = document.getElementById('resultText');
@@ -81,10 +93,7 @@
         return;
       }
 
-      // Convert sen to RM
       const rate = rateSen / 100;
-
-      // Formula: (Amp × Volt) = Watt → kW × Hours × Rate = Cost
       const powerKw = (amp * voltage) / 1000;
       const hours = minutes / 60;
       const cost = powerKw * hours * rate;
@@ -92,7 +101,6 @@
       resultText.textContent = `Estimated Cost: RM ${cost.toFixed(2)}`;
       resultBox.classList.remove('hidden');
 
-      // Add to history
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${amp}</td>
@@ -102,6 +110,45 @@
         <td>RM ${cost.toFixed(2)}</td>
       `;
       historyTable.prepend(row);
+    });
+
+    // === Modal Logic ===
+    const modal = document.getElementById("ratesModal");
+    const openRates = document.getElementById("openRates");
+    const closeBtn = document.querySelector(".modal .close");
+
+    openRates.addEventListener("click", () => {
+      modal.style.display = "block";
+    });
+
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // === PWA Install Button ===
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = "inline-block";
+
+      installBtn.addEventListener("click", async () => {
+        installBtn.style.display = "none";
+        deferredPrompt.prompt();
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome !== "accepted") {
+          installBtn.style.display = "inline-block"; // show again if declined
+        }
+        deferredPrompt = null;
+      });
     });
   </script>
 </body>
