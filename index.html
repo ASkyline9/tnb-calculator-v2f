@@ -5,36 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TNB Electricity Cost Calculator</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="./assets/favicon-64x64.png" type="image/png">
 </head>
 <body>
   <div class="app-container">
     <header>
-      <img src="./assets/favicon-64x64.png" alt="App Logo" class="logo">
+      <img src="logo.png" alt="TNB Logo" class="logo">
       <h1>TNB Electricity Cost Calculator</h1>
       <p class="subtitle">Quickly Calculate Your Electricity Cost (Malaysia)</p>
     </header>
 
     <form id="calcForm">
       <label for="amp">Current (Amp):</label>
-      <input type="number" id="amp" step="0.01" required>
+      <input type="number" step="0.01" id="amp" placeholder="e.g. 6.8" required>
 
-      <label for="minutes">Usage Time (Minutes):</label>
-      <input type="number" id="minutes" required>
+      <label for="minutes">Minutes:</label>
+      <input type="number" step="1" id="minutes" placeholder="e.g. 45" required>
 
-      <label for="rate">Rate (RM/kWh):</label>
-      <input type="number" id="rate" step="0.0001" required>
+      <label for="rate">TNB Rate:</label>
+      <input type="number" step="0.01" id="rate" placeholder="e.g. 27" required>
 
       <label for="voltage">Voltage (V):</label>
-      <input type="number" id="voltage" value="240" required>
+      <input type="number" step="1" id="voltage" placeholder="e.g. 240" required>
 
       <button type="submit" class="btn">Calculate</button>
     </form>
 
-    <div id="result" class="result-box hidden"></div>
+    <div class="result-box hidden" id="resultBox">
+      <p id="resultText"></p>
+    </div>
 
-    <!-- History Table -->
+    <div class="tnb-rates">
+      <h2>TNB Rates (July 2025)</h2>
+    </div>
+
     <div class="history">
       <h2>Calculation History</h2>
       <table id="historyTable">
@@ -42,35 +45,65 @@
           <tr>
             <th>Amp</th>
             <th>Minutes</th>
-            <th>Rate (RM/kWh)</th>
+            <th>Rate</th>
             <th>Voltage</th>
             <th>Cost (RM)</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- History rows will be injected here -->
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
 
-    <!-- TNB Tariff Reference Table -->
-    <section class="tnb-rates">
-      <h2>TNB Electricity Tariff (July 2025)</h2>
-      <img src="./assets/tnb-rates.jpg" alt="TNB Rates Table" style="width:100%; border-radius:8px; margin-top:10px;">
-    </section>
-
     <footer>
       <nav>
-        <button onclick="document.getElementById('calcForm').reset()">Reset</button>
-        <button onclick="clearHistory()">Clear History</button>
+        <button type="button">About</button>
+        <button type="button">Contact</button>
       </nav>
-      <p>
-        Version 2.0.0 | Developed by <a href="mailto:aa.skyline99@gmail.com">aa.skyline99@gmail.com</a><br>
-        Design assisted by ChatGPT | Date: 20 August 2025<br>
-        © All Rights Reserved.
-      </p>
+      <p>&copy; 2025 TNB Calculator V3</p>
     </footer>
   </div>
 
-  <script src="script.js"></script>
-<
+  <script>
+    const form = document.getElementById('calcForm');
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
+    const historyTable = document.querySelector('#historyTable tbody');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const amp = parseFloat(document.getElementById('amp').value);
+      const minutes = parseFloat(document.getElementById('minutes').value);
+      const rateSen = parseFloat(document.getElementById('rate').value);
+      const voltage = parseFloat(document.getElementById('voltage').value);
+
+      if (isNaN(amp) || isNaN(minutes) || isNaN(rateSen) || isNaN(voltage)) {
+        alert("Please fill in all fields with valid numbers.");
+        return;
+      }
+
+      // Convert sen to RM
+      const rate = rateSen / 100;
+
+      // Formula: (Amp × Volt) = Watt → kW × Hours × Rate = Cost
+      const powerKw = (amp * voltage) / 1000;
+      const hours = minutes / 60;
+      const cost = powerKw * hours * rate;
+
+      resultText.textContent = `Estimated Cost: RM ${cost.toFixed(2)}`;
+      resultBox.classList.remove('hidden');
+
+      // Add to history
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${amp}</td>
+        <td>${minutes}</td>
+        <td>${rateSen.toFixed(2)}</td>
+        <td>${voltage}</td>
+        <td>RM ${cost.toFixed(2)}</td>
+      `;
+      historyTable.prepend(row);
+    });
+  </script>
+</body>
+</html>
