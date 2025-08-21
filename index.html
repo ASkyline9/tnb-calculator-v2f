@@ -93,89 +93,89 @@
         </div>
     </div>
 
-    <script>
-        // Wait for the DOM to be fully loaded before running the script
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure the modal is hidden on initial page load
-            const ratesModal = document.getElementById('ratesModal');
-            ratesModal.classList.add('hidden');
+   <script>
+    // Self-invoking function to execute code immediately
+    (function() {
+        const ratesModal = document.getElementById('ratesModal');
 
-            const form = document.getElementById('calcForm');
-            const resultBox = document.getElementById('resultBox');
-            const resultText = document.getElementById('resultText');
-            const historyTable = document.querySelector('#historyTable tbody');
-            const installBtn = document.getElementById('installBtn');
-            
-            // Modal elements
-            const showRatesBtn = document.getElementById('showRatesBtn');
-            const closeBtn = document.getElementById('closeBtn');
+        // Force the modal to be hidden as soon as the script is parsed
+        if (ratesModal) {
+            ratesModal.classList.add('hidden');
+        }
 
-            // Calculator logic
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('calcForm');
+            const resultBox = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
+            const historyTable = document.querySelector('#historyTable tbody');
+            const installBtn = document.getElementById('installBtn');
+            
+            const showRatesBtn = document.getElementById('showRatesBtn');
+            const closeBtn = document.getElementById('closeBtn');
 
-                const amp = parseFloat(document.getElementById('amp').value);
-                const minutes = parseFloat(document.getElementById('minutes').value);
-                const rate = parseFloat(document.getElementById('rate').value);
-                const voltage = parseFloat(document.getElementById('voltage').value);
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const amp = parseFloat(document.getElementById('amp').value);
+                const minutes = parseFloat(document.getElementById('minutes').value);
+                const rate = parseFloat(document.getElementById('rate').value);
+                const voltage = parseFloat(document.getElementById('voltage').value);
 
-                if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-                    alert("Please fill in all fields with valid numbers.");
-                    return;
-                }
+                if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
+                    alert("Please fill in all fields with valid numbers.");
+                    return;
+                }
 
-                const powerKw = (amp * voltage) / 1000;
-                const hours = minutes / 60;
-                const cost = powerKw * hours * rate;
+                const powerKw = (amp * voltage) / 1000;
+                const hours = minutes / 60;
+                const cost = powerKw * hours * rate;
 
-                resultText.innerHTML = `Estimated Cost: <strong>RM ${cost.toFixed(2)}</strong>`;
-                resultBox.classList.remove('hidden');
-                resultBox.scrollIntoView({ behavior: 'smooth' });
+                resultText.innerHTML = `Estimated Cost: <strong>RM ${cost.toFixed(2)}</strong>`;
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth' });
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${amp}</td>
-                    <td>${minutes}</td>
-                    <td>${rate.toFixed(3)}</td>
-                    <td>${voltage}</td>
-                    <td><strong>${cost.toFixed(2)}</strong></td>
-                `;
-                historyTable.prepend(row);
-            });
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${amp}</td>
+                    <td>${minutes}</td>
+                    <td>${rate.toFixed(3)}</td>
+                    <td>${voltage}</td>
+                    <td><strong>${cost.toFixed(2)}</strong></td>
+                `;
+                historyTable.prepend(row);
+            });
 
-            // PWA Install Button logic
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installBtn.classList.remove('hidden');
-            });
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.classList.remove('hidden');
+            });
 
-            installBtn.addEventListener('click', () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then(() => {
-                        deferredPrompt = null;
-                        installBtn.classList.add('hidden');
-                    });
-                }
-            });
-            
-            // Modal Logic
-            showRatesBtn.addEventListener('click', () => {
-                ratesModal.classList.remove('hidden');
-            });
+            installBtn.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(() => {
+                        deferredPrompt = null;
+                        installBtn.classList.add('hidden');
+                    });
+                }
+            });
+            
+            showRatesBtn.addEventListener('click', () => {
+                ratesModal.classList.remove('hidden');
+            });
 
-            closeBtn.addEventListener('click', () => {
-                ratesModal.classList.add('hidden');
-            });
+            closeBtn.addEventListener('click', () => {
+                ratesModal.classList.add('hidden');
+            });
 
-            window.addEventListener('click', (e) => {
-                if (e.target == ratesModal) {
-                    ratesModal.classList.add('hidden');
-                }
-            });
-        });
-    </script>
+            window.addEventListener('click', (e) => {
+                if (e.target == ratesModal) {
+                    ratesModal.classList.add('hidden');
+                }
+            });
+        });
+    })();
+</script>
 </body>
 </html>
