@@ -1,178 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TNB Electricity Cost Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNB Electricity Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <img src="assets/favicon-64x64.png" alt="TNB Logo" class="logo">
-            <h1>TNB Electricity Cost Calculator</h1>
-            <p class="subtitle">Quickly Calculate Your Electricity Cost in Malaysia</p>
-        </header>
+    <div class="app-container">
+        <header>
+            <img src="assets/favicon-64x64.png" alt="TNB Logo" class="logo">
+            <h1>TNB Electricity Cost Calculator</h1>
+            <p class="subtitle">Quickly Calculate Your Electricity Cost in Malaysia</p>
+        </header>
 
-        <main>
-            <div class="card">
-                <form id="calcForm">
-                    <div class="form-group">
-                        <label for="amp">Current</label>
-                        <div class="input-wrapper">
-                            <input type="number" step="0.01" id="amp" placeholder="e.g. 6.8" required>
-                            <span>Amps</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="voltage">Voltage</label>
-                        <div class="input-wrapper">
-                            <input type="number" step="1" id="voltage" value="240" required>
-                            <span>Volts</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="minutes">Usage Duration</label>
-                        <div class="input-wrapper">
-                            <input type="number" step="1" id="minutes" placeholder="e.g. 45" required>
-                            <span>Minutes</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="rate">TNB Rate (RM0.27 July 2025)</label>
-                        <div class="input-wrapper">
-                            <input type="number" step="0.001" id="rate" value="0.27" required>
-                            <span>RM/kWh</span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Calculate Cost</button>
-                </form>
-            </div>
+        <main>
+            <div class="card">
+                <form id="calcForm">
+                    <div class="form-group">
+                        <label for="amp">Current</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" id="amp" placeholder="e.g. 6.8" required>
+                            <span>Amps</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="voltage">Voltage</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="1" id="voltage" value="240" required>
+                            <span>Volts</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="minutes">Usage Duration</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="1" id="minutes" placeholder="e.g. 45" required>
+                            <span>Minutes</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rate">TNB Rate (RM0.27 July 2025)</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.001" id="rate" value="0.27" required>
+                            <span>RM/kWh</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Calculate Cost</button>
+                </form>
+            </div>
 
-            <div class="card result-box hidden" id="resultBox">
-                <p id="resultText"></p>
-            </div>
-            
-            <button id="showRatesBtn" class="secondary-btn">View TNB Tariff Details</button>
+            <div class="card result-box hidden" id="resultBox">
+                <p id="resultText"></p>
+            </div>
+            
+            <button id="showRatesBtn" class="secondary-btn">View TNB Tariff Details</button>
 
-            <div class="card history">
-                <h2>Calculation History</h2>
-                <div class="table-container">
-                    <table id="historyTable">
-                        <thead>
-                            <tr>
-                                <th>Amp</th>
-                                <th>Mins</th>
-                                <th>Rate</th>
-                                <th>Volt</th>
-                                <th>Cost (RM)</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
+            <div class="card history">
+                <h2>Calculation History</h2>
+                <div class="table-container">
+                    <table id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Amp</th>
+                                <th>Mins</th>
+                                <th>Rate</th>
+                                <th>Volt</th>
+                                <th>Cost (RM)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
 
-        <footer>
-            <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
-            <button id="installBtn" class="hidden">Install App</button>
-            <p class="dev-info">Developed by aa.skyline99@gmail.com</p>
-            <p>Design assisted by Gemini</p>
-            <p>&copy; 2025 Version 2.0.0 | 21 August 2025</p>
-            <p>All Rights Reserved</p>
-        </footer>
-    </div>
-    
-    <div id="ratesModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <span id="closeBtn" class="close-btn">&times;</span>
-            <h2>TNB Domestic Tariff (Effective 1 Jan 2024)</h2>
-            <img src="assets/tnb-rates.png" alt="TNB Domestic Tariff Rates" class="rates-image">
-        </div>
-    </div>
+        <footer>
+            <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
+            <button id="installBtn" class="hidden">Install App</button>
+            <p class="dev-info">Developed by aa.skyline99@gmail.com</p>
+            <p>Design assisted by Gemini</p>
+            <p>&copy; 2025 Version 2.0.0 | 21 August 2025</p>
+            <p>All Rights Reserved</p>
+        </footer>
+    </div>
+    
+    <div id="ratesModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span id="closeBtn" class="close-btn">&times;</span>
+            <h2>TNB Domestic Tariff (Effective 1 Jan 2024)</h2>
+            <img src="assets/tnb-rates.png" alt="TNB Domestic Tariff Rates" class="rates-image">
+        </div>
+    </div>
 
-    <script>
-        // Wait for the DOM to be fully loaded before running the script
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('calcForm');
-            const resultBox = document.getElementById('resultBox');
-            const resultText = document.getElementById('resultText');
-            const historyTable = document.querySelector('#historyTable tbody');
-            const installBtn = document.getElementById('installBtn');
-            
-            // Modal elements
-            const ratesModal = document.getElementById('ratesModal');
-            const showRatesBtn = document.getElementById('showRatesBtn');
-            const closeBtn = document.getElementById('closeBtn');
+    <script>
+        // Wait for the DOM to be fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure the modal is hidden on initial page load
+            const ratesModal = document.getElementById('ratesModal');
+            ratesModal.classList.add('hidden');
 
-            // Calculator logic
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+            const form = document.getElementById('calcForm');
+            const resultBox = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
+            const historyTable = document.querySelector('#historyTable tbody');
+            const installBtn = document.getElementById('installBtn');
+            
+            // Modal elements
+            const showRatesBtn = document.getElementById('showRatesBtn');
+            const closeBtn = document.getElementById('closeBtn');
 
-                const amp = parseFloat(document.getElementById('amp').value);
-                const minutes = parseFloat(document.getElementById('minutes').value);
-                const rate = parseFloat(document.getElementById('rate').value);
-                const voltage = parseFloat(document.getElementById('voltage').value);
+            // Calculator logic
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-                if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-                    alert("Please fill in all fields with valid numbers.");
-                    return;
-                }
+                const amp = parseFloat(document.getElementById('amp').value);
+                const minutes = parseFloat(document.getElementById('minutes').value);
+                const rate = parseFloat(document.getElementById('rate').value);
+                const voltage = parseFloat(document.getElementById('voltage').value);
 
-                const powerKw = (amp * voltage) / 1000;
-                const hours = minutes / 60;
-                const cost = powerKw * hours * rate;
+                if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
+                    alert("Please fill in all fields with valid numbers.");
+                    return;
+                }
 
-                resultText.innerHTML = `Estimated Cost: <strong>RM ${cost.toFixed(2)}</strong>`;
-                resultBox.classList.remove('hidden');
-                resultBox.scrollIntoView({ behavior: 'smooth' });
+                const powerKw = (amp * voltage) / 1000;
+                const hours = minutes / 60;
+                const cost = powerKw * hours * rate;
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${amp}</td>
-                    <td>${minutes}</td>
-                    <td>${rate.toFixed(3)}</td>
-                    <td>${voltage}</td>
-                    <td><strong>${cost.toFixed(2)}</strong></td>
-                `;
-                historyTable.prepend(row);
-            });
+                resultText.innerHTML = `Estimated Cost: <strong>RM ${cost.toFixed(2)}</strong>`;
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth' });
 
-            // PWA Install Button logic
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installBtn.classList.remove('hidden');
-            });
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${amp}</td>
+                    <td>${minutes}</td>
+                    <td>${rate.toFixed(3)}</td>
+                    <td>${voltage}</td>
+                    <td><strong>${cost.toFixed(2)}</strong></td>
+                `;
+                historyTable.prepend(row);
+            });
 
-            installBtn.addEventListener('click', () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then(() => {
-                        deferredPrompt = null;
-                        installBtn.classList.add('hidden');
-                    });
-                }
-            });
-            
-            // Modal Logic
-            showRatesBtn.addEventListener('click', () => {
-                ratesModal.classList.remove('hidden');
-            });
+            // PWA Install Button logic
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.classList.remove('hidden');
+            });
 
-            closeBtn.addEventListener('click', () => {
-                ratesModal.classList.add('hidden');
-            });
+            installBtn.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then(() => {
+                        deferredPrompt = null;
+                        installBtn.classList.add('hidden');
+                    });
+                }
+            });
+            
+            // Modal Logic
+            showRatesBtn.addEventListener('click', () => {
+                ratesModal.classList.remove('hidden');
+            });
 
-            window.addEventListener('click', (e) => {
-                if (e.target == ratesModal) {
-                    ratesModal.classList.add('hidden');
-                }
-            });
-        });
-    </script>
+            closeBtn.addEventListener('click', () => {
+                ratesModal.classList.add('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target == ratesModal) {
+                    ratesModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
