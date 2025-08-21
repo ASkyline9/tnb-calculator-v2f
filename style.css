@@ -1,187 +1,239 @@
-/* General reset */
+/* General reset & Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background: #f8fafc;
-  color: #333;
-  line-height: 1.5;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
 }
 
 .app-container {
-  width: 100%;
-  max-width: 500px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
+/* Header */
 header {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
 }
 
-header img.logo {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 10px;
+header .logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 12px;
 }
 
 header h1 {
-  font-size: 1.5rem;
-  color: #0f172a;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
 }
 
-.subtitle {
-  font-size: 0.9rem;
-  color: #DE3314; /* TNB Red */
+header .subtitle {
+    font-size: 1rem;
+    color: #DE3314; /* TNB Red */
 }
 
+/* Card layout */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    width: 100%;
+}
+
+/* Form Styling */
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 label {
-  font-weight: bold;
-  font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #4b5563;
 }
 
-input {
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    transition: border-color 0.2s;
+}
+.input-wrapper:focus-within {
+    border-color: #005DAA; /* TNB Blue */
 }
 
+input[type="number"] {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    background: transparent;
+    -moz-appearance: textfield; /* Firefox */
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: auto;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
+}
+input:focus {
+    outline: none;
 }
 
+.input-wrapper span {
+    padding: 0 12px;
+    font-size: 0.9rem;
+    color: #6b7280;
+    background-color: #f9fafb;
+    border-left: 1px solid #d1d5db;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+/* Button Styling */
 .btn {
-  background: #0f172a;
-  color: #fff;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
 }
 
 .btn:hover {
-  background: #1e293b;
+    background: #1e293b;
 }
 
+/* Result Box */
 .result-box {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  font-weight: bold;
-  color: #0f172a;
+    background: #e0f2fe;
+    border: 1px solid #7dd3fc;
+    color: #0c4a6e;
+    text-align: center;
+    font-size: 1.1rem;
+}
+.result-box strong {
+    font-weight: 700;
 }
 
-.tnb-rates h2 {
-  font-size: 0.9rem;
-  color: #005DAA; /* TNB Blue */
-  margin-top: 20px;
+/* TNB Rates Section */
+.card h2 {
+    font-size: 1.1rem;
+    color: #0f172a;
+    margin-bottom: 12px;
+    text-align: center;
 }
 
-.history {
-  margin-top: 20px;
+.rates-image {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
 }
 
-.history h2 {
-  font-size: 0.9rem;
-  color: #DE3314; /* TNB Red */
+/* History Table */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
 }
 
 .history table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 0.9rem;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.9rem;
 }
 
 .history th,
 .history td {
-  border: 1px solid #cbd5e1;
-  padding: 8px;
-  text-align: center;
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    text-align: center;
 }
 
 .history th {
-  background: #e2e8f0;
-  font-weight: bold;
+    background: #f3f4f6;
+    font-weight: 500;
+    color: #374151;
 }
 
 .history tr:nth-child(even) {
-  background: #f8fafc;
+    background: #f9fafb;
 }
 
-.history td {
-  color: #DE3314; /* TNB Red */
+.history td strong {
+    color: #DE3314; /* TNB Red */
 }
 
+
+/* Footer */
 footer {
-  margin-top: 20px;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 10px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #475569;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #6b7280;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-footer nav {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
+.footer-link {
+    color: #005DAA; /* TNB Blue */
+    text-decoration: none;
+    font-weight: 500;
+}
+.footer-link:hover {
+    text-decoration: underline;
 }
 
-footer button {
-  background: none;
-  border: none;
-  color: #0f172a;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-footer button:hover {
-  text-decoration: underline;
-}
-
-footer p {
-  color: #475569;
-  margin: 0;
-  font-size: 0.8rem;
+footer .dev-info {
+    margin-top: 8px;
 }
 
 /* Install Button */
 #installBtn {
-  background-color: #005DAA; /* TNB Blue */
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  margin-top: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
+    background-color: #005DAA; /* TNB Blue */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
 }
 
 #installBtn:hover {
-  background-color: #DE3314; /* TNB Red */
+    background-color: #DE3314; /* TNB Red */
 }
 
+/* Utility Class */
 .hidden {
-  display: none;
+    display: none;
 }

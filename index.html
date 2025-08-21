@@ -1,128 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TNB Electricity Cost Calculator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TNB Electricity Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
 </head>
 <body>
-  <div class="app-container">
-    <header>
-      <img src="logo.png" alt="TNB Logo" class="logo">
-      <h1>TNB Electricity Cost Calculator</h1>
-      <p class="subtitle">Quickly Calculate Your Electricity Cost (Malaysia)</p>
-    </header>
+    <div class="app-container">
+        <header>
+            <img src="assets/favicon-64x64.png" alt="TNB Logo" class="logo">
+            <h1>TNB Electricity Cost Calculator</h1>
+            <p class="subtitle">Quickly Calculate Your Electricity Cost in Malaysia</p>
+        </header>
 
-    <form id="calcForm">
-      <label for="amp">Current (Amp):</label>
-      <input type="number" step="0.01" id="amp" placeholder="e.g. 6.8" required>
+        <main>
+            <div class="card">
+                <form id="calcForm">
+                    <div class="form-group">
+                        <label for="amp">Current</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.01" id="amp" placeholder="e.g. 6.8" required>
+                            <span>Amps</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="voltage">Voltage</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="1" id="voltage" value="240" required>
+                            <span>Volts</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="minutes">Usage Duration</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="1" id="minutes" placeholder="e.g. 45" required>
+                            <span>Minutes</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rate">TNB Rate</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.001" id="rate" value="0.218" required>
+                            <span>RM/kWh</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Calculate Cost</button>
+                </form>
+            </div>
 
-      <label for="minutes">Minutes:</label>
-      <input type="number" step="1" id="minutes" placeholder="e.g. 45" required>
+            <div class="card result-box hidden" id="resultBox">
+                <p id="resultText"></p>
+            </div>
 
-      <label for="rate">TNB Rate (RM/kWh):</label>
-      <input type="number" step="0.01" id="rate" value="0.27" required>
+            <div class="card">
+                <h2>TNB Domestic Tariff (Effective 1 Jan 2024)</h2>
+                <img src="assets/tnb-rates.png" alt="TNB Domestic Tariff Rates" class="rates-image">
+            </div>
 
-      <label for="voltage">Voltage (V):</label>
-      <input type="number" step="1" id="voltage" placeholder="e.g. 240" required>
+            <div class="card history">
+                <h2>Calculation History</h2>
+                <div class="table-container">
+                    <table id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Amp</th>
+                                <th>Mins</th>
+                                <th>Rate</th>
+                                <th>Volt</th>
+                                <th>Cost (RM)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
 
-      <button type="submit" class="btn">Calculate</button>
-    </form>
-
-    <div class="result-box hidden" id="resultBox">
-      <p id="resultText"></p>
+        <footer>
+            <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
+            <button id="installBtn" class="hidden">Install App</button>
+            <p class="dev-info">Developed by aa.skyline99@gmail.com</p>
+            <p>&copy; 2025 Version 2.0.0 | 20 August 2025</p>
+            <p>All Rights Reserved</p>
+        </footer>
     </div>
 
-    <div class="tnb-rates">
-      <h2>TNB Rates (July 2025)</h2>
-      <!-- You can add rates table here later -->
-    </div>
+    <script>
+        const form = document.getElementById('calcForm');
+        const resultBox = document.getElementById('resultBox');
+        const resultText = document.getElementById('resultText');
+        const historyTable = document.querySelector('#historyTable tbody');
+        const installBtn = document.getElementById('installBtn');
 
-    <div class="history">
-      <h2>Calculation History</h2>
-      <table id="historyTable">
-        <thead>
-          <tr>
-            <th>Amp</th>
-            <th>Minutes</th>
-            <th>Rate</th>
-            <th>Voltage</th>
-            <th>Cost (RM)</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+        // Calculator logic
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    <footer>
-      <nav>
-        <button type="button">About</button>
-        <button type="button">Contact</button>
-      </nav>
-      <p>&copy; 2025 TNB Calculator V3</p>
-      <button id="installBtn" class="hidden">Install App</button>
-    </footer>
-  </div>
+            const amp = parseFloat(document.getElementById('amp').value);
+            const minutes = parseFloat(document.getElementById('minutes').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const voltage = parseFloat(document.getElementById('voltage').value);
 
-  <script>
-    const form = document.getElementById('calcForm');
-    const resultBox = document.getElementById('resultBox');
-    const resultText = document.getElementById('resultText');
-    const historyTable = document.querySelector('#historyTable tbody');
-    const installBtn = document.getElementById('installBtn');
+            if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
+                alert("Please fill in all fields with valid numbers.");
+                return;
+            }
 
-    // Calculator logic
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+            // Formula: (Amp × Volt) = Watt → kW × Hours × Rate = Cost
+            const powerKw = (amp * voltage) / 1000;
+            const hours = minutes / 60;
+            const cost = powerKw * hours * rate;
 
-      const amp = parseFloat(document.getElementById('amp').value);
-      const minutes = parseFloat(document.getElementById('minutes').value);
-      const rate = parseFloat(document.getElementById('rate').value);
-      const voltage = parseFloat(document.getElementById('voltage').value);
+            resultText.innerHTML = `Estimated Cost: <strong>RM ${cost.toFixed(2)}</strong>`;
+            resultBox.classList.remove('hidden');
+            resultBox.scrollIntoView({ behavior: 'smooth' });
 
-      if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-        alert("Please fill in all fields with valid numbers.");
-        return;
-      }
-
-      // Formula: (Amp × Volt) = Watt → kW × Hours × Rate = Cost
-      const powerKw = (amp * voltage) / 1000;
-      const hours = minutes / 60;
-      const cost = powerKw * hours * rate;
-
-      resultText.textContent = `Estimated Cost: RM ${cost.toFixed(2)}`;
-      resultBox.classList.remove('hidden');
-
-      // Add to history
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${amp}</td>
-        <td>${minutes}</td>
-        <td>${rate.toFixed(2)}</td>
-        <td>${voltage}</td>
-        <td>RM ${cost.toFixed(2)}</td>
-      `;
-      historyTable.prepend(row);
-    });
-
-    // PWA Install Button logic
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.classList.remove('hidden');
-    });
-
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          installBtn.classList.add('hidden');
+            // Add to history
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${amp}</td>
+                <td>${minutes}</td>
+                <td>${rate.toFixed(3)}</td>
+                <td>${voltage}</td>
+                <td><strong>${cost.toFixed(2)}</strong></td>
+            `;
+            historyTable.prepend(row);
         });
-      }
-    });
-  </script>
+
+        // PWA Install Button logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+        });
+
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    installBtn.classList.add('hidden');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
