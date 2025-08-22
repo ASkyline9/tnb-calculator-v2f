@@ -132,23 +132,6 @@ input:focus {
     background: #1e293b;
 }
 
-.secondary-btn {
-    background-color: #f1f5f9;
-    color: #0f172a;
-    border: 1px solid #cbd5e1;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color 0.2s;
-}
-
-.secondary-btn:hover {
-    background-color: #e2e8f0;
-}
-
 /* Result Box */
 .result-box {
     background: #e0f2fe;
@@ -159,20 +142,6 @@ input:focus {
 }
 .result-box strong {
     font-weight: 700;
-}
-
-/* TNB Rates Section */
-.card h2 {
-    font-size: 1.1rem;
-    color: #0f172a;
-    margin-bottom: 12px;
-    text-align: center;
-}
-
-.rates-image {
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
 }
 
 /* History Table */
@@ -253,4 +222,32 @@ footer .dev-info {
 /* Utility Class */
 .hidden {
     display: none;
+}
+
+/* --- ADDITIONS & MODIFICATIONS --- */
+
+/* Clear History Button Styling */
+#clearHistoryBtn {
+    background-color: #DE3314; /* TNB Red */
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+#clearHistoryBtn:hover {
+    background-color: #a9280f; /* A darker shade of TNB Red */
+}
+
+/* History Buttons Layout */
+.history-buttons {
+    display: flex;
+    justify-content: center; /* This centers the button */
+    gap: 10px;
+    margin-top: 20px; /* This adds space below the table */
 }

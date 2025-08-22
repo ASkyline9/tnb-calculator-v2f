@@ -71,8 +71,7 @@
                     </table>
                 </div>
                 <div class="history-buttons">
-                    <button id="clearHistoryBtn" class="secondary-btn">Clear History</button>
-                    <button id="showRatesBtn" class="secondary-btn">TNB Rates</button>
+                    <button id="clearHistoryBtn">Clear History</button>
                 </div>
             </div>
         </main>
@@ -86,20 +85,9 @@
             <p>All Rights Reserved</p>
         </footer>
     </div>
-    
-    <div id="ratesModal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <button id="closeBtn" class="close-btn" aria-label="Close">&times;</button>
-            <h2>TNB Domestic Tariff (Effective 1 Jan 2024)</h2>
-            <img src="assets/tnb-rates.png" alt="TNB Domestic Tariff Rates" class="rates-image">
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const ratesModal = document.getElementById('ratesModal');
-            const showRatesBtn = document.getElementById('showRatesBtn');
-            const closeBtn = document.getElementById('closeBtn');
             const form = document.getElementById('calcForm');
             const resultBox = document.getElementById('resultBox');
             const resultText = document.getElementById('resultText');
@@ -172,21 +160,6 @@
 
             clearHistoryBtn.addEventListener('click', clearHistory);
             
-            // Modal Logic
-            showRatesBtn.addEventListener('click', () => {
-                ratesModal.classList.remove('hidden');
-            });
-
-            closeBtn.addEventListener('click', () => {
-                ratesModal.classList.add('hidden');
-            });
-
-            window.addEventListener('click', (e) => {
-                if (e.target == ratesModal) {
-                    ratesModal.classList.add('hidden');
-                }
-            });
-
             // PWA Install Button logic
             let deferredPrompt;
             window.addEventListener('beforeinstallprompt', (e) => {
