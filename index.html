@@ -70,6 +70,10 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <div class="history-buttons">
+                    <button id="clearHistoryBtn" class="secondary-btn">Clear History</button>
+                    <button id="showRatesBtn" class="secondary-btn">TNB Rates</button>
+                </div>
             </div>
         </main>
 
@@ -83,13 +87,26 @@
         </footer>
     </div>
     
+    <div id="ratesModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="closeBtn" class="close-btn" aria-label="Close">&times;</button>
+            <h2>TNB Domestic Tariff (Effective 1 Jan 2024)</h2>
+            <img src="assets/tnb-rates.png" alt="TNB Domestic Tariff Rates" class="rates-image">
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const ratesModal = document.getElementById('ratesModal');
+            const showRatesBtn = document.getElementById('showRatesBtn');
+            const closeBtn = document.getElementById('closeBtn');
             const form = document.getElementById('calcForm');
             const resultBox = document.getElementById('resultBox');
             const resultText = document.getElementById('resultText');
             const historyTable = document.querySelector('#historyTable tbody');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
             const installBtn = document.getElementById('installBtn');
+            const MAX_HISTORY = 10;
 
             // Calculator logic
             form.addEventListener('submit', function(e) {
@@ -112,15 +129,62 @@
                 resultBox.classList.remove('hidden');
                 resultBox.scrollIntoView({ behavior: 'smooth' });
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${amp}</td>
-                    <td>${minutes}</td>
-                    <td>${rate.toFixed(3)}</td>
-                    <td>${voltage}</td>
-                    <td><strong>${cost.toFixed(2)}</strong></td>
-                `;
-                historyTable.prepend(row);
+                addToHistory(amp, minutes, rate, voltage, cost);
+            });
+
+            function addToHistory(amp, minutes, rate, voltage, cost) {
+                const history = JSON.parse(localStorage.getItem('calcHistory')) || [];
+                const newEntry = { amp, minutes, rate, voltage, cost: cost.toFixed(2) };
+                
+                // Add the new entry to the start of the array
+                history.unshift(newEntry);
+                
+                // Keep only the 10 most recent entries
+                if (history.length > MAX_HISTORY) {
+                    history.pop();
+                }
+
+                localStorage.setItem('calcHistory', JSON.stringify(history));
+                renderHistory();
+            }
+
+            function renderHistory() {
+                const history = JSON.parse(localStorage.getItem('calcHistory')) || [];
+                historyTable.innerHTML = ''; // Clear the current table
+
+                history.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${entry.amp}</td>
+                        <td>${entry.minutes}</td>
+                        <td>${entry.rate}</td>
+                        <td>${entry.voltage}</td>
+                        <td><strong>${entry.cost}</strong></td>
+                    `;
+                    historyTable.appendChild(row);
+                });
+            }
+
+            function clearHistory() {
+                localStorage.removeItem('calcHistory');
+                renderHistory();
+            }
+
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            
+            // Modal Logic
+            showRatesBtn.addEventListener('click', () => {
+                ratesModal.classList.remove('hidden');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                ratesModal.classList.add('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target == ratesModal) {
+                    ratesModal.classList.add('hidden');
+                }
             });
 
             // PWA Install Button logic
@@ -140,6 +204,9 @@
                     });
                 }
             });
+
+            // Load history on initial page load
+            renderHistory();
         });
     </script>
 </body>
