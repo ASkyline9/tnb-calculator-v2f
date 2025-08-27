@@ -6,8 +6,6 @@
     <title>TNB Electricity Cost Calculator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4071724251256256" crossorigin="anonymous"></script>
     
 </head>
 <body>
@@ -17,16 +15,6 @@
             <h1>TNB Electricity Cost Calculator</h1>
             <p class="subtitle">Quickly Calculate Your Electricity Cost in Malaysia</p>
         </header>
-
-        <div class="ad-container">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-4071724251256256"
-                data-ad-slot="YOUR_AD_SLOT_ID"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
 
         <main>
             <div class="card">
@@ -89,18 +77,21 @@
             </div>
 
             <a href="https://s.shopee.com.my/4L9U1n1WuH" target="_blank" style="text-decoration: none;">
-    <div style="background-color: #EE4D2D; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 1.1em;">
-        Appliances Tester (Current Measurement) on Shopee
-    </div>
-</a>
+                <div style="background-color: #EE4D2D; color: white; padding: 15px; text-align: center; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 1.1em;">
+                    Appliances Tester (Current Measurement) on Shopee
+                </div>
+            </a>
         </main>
 
         <footer>
-            <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
+            <div class="footer-links">
+                <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
+            </div>
             <button id="installBtn" class="hidden">Install App</button>
             <p class="dev-info">Developed by aa.skyline99@gmail.com</p>
             <p>Design assisted by Gemini</p>
             <p>&copy; 2025 Version 2.0.0 | 21 August 2025</p>
+            <a href="https://askyline9.github.io/petrol-calculator-v2/" target="_blank" rel="noopener noreferrer" class="footer-link petrol-link"><strong>Petrol Usage Calculator</strong></a>
             <p>All Rights Reserved</p>
         </footer>
     </div>
@@ -124,7 +115,9 @@
                 const voltage = parseFloat(document.getElementById('voltage').value);
 
                 if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-                    alert("Please fill in all fields with valid numbers.");
+                    // Do not use alert(), but show a message to the user
+                    resultText.innerHTML = `<span style="color:red;">Please fill in all fields with valid numbers.</span>`;
+                    resultBox.classList.remove('hidden');
                     return;
                 }
 
