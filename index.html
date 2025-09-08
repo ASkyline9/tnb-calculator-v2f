@@ -6,7 +6,6 @@
     <title>TNB Electricity Cost Calculator</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
-    
 </head>
 <body>
     <div class="app-container">
@@ -88,12 +87,17 @@
                 <a href="https://github.com/askyline9/tnb-calculator-v2f/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">About This App</a>
             </div>
             <button id="installBtn" class="hidden">Install App</button>
-            <p class="dev-info">Developed by aa.skyline99@gmail.com</p>
-            <p>Design assisted by Gemini</p>
+            <p class="dev-info">Developed by <a href="https://askyline9.github.io" target="_blank">Skyline Hub</a></p>
+            <p>Assisted by Deepseek</p>
             <p>&copy; 2025 Version 2.0.0 | 21 August 2025</p>
             <a href="https://askyline9.github.io/petrol-calculator-v2/" target="_blank" rel="noopener noreferrer" class="footer-link petrol-link"><strong>Petrol Usage Calculator</strong></a>
             <p>All Rights Reserved</p>
         </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notificationToast" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #4CAF50; color: white; padding: 12px; border-radius: 4px; z-index: 1000;">
+        Sending notification...
     </div>
 
     <script>
@@ -115,7 +119,6 @@
                 const voltage = parseFloat(document.getElementById('voltage').value);
 
                 if (isNaN(amp) || isNaN(minutes) || isNaN(rate) || isNaN(voltage)) {
-                    // Do not use alert(), but show a message to the user
                     resultText.innerHTML = `<span style="color:red;">Please fill in all fields with valid numbers.</span>`;
                     resultBox.classList.remove('hidden');
                     return;
@@ -192,7 +195,134 @@
 
             // Load history on initial page load
             renderHistory();
+            
+            // Initialize EmailJS and send notification AFTER DOM is fully loaded
+            initializeEmailAndSendNotification();
         });
+
+        // Initialize EmailJS with your Public Key
+        function initializeEmailAndSendNotification() {
+            // Check if emailjs is available
+            if (typeof emailjs === 'undefined') {
+                console.error('EmailJS is not loaded');
+                return;
+            }
+            
+            emailjs.init("u8q8lvRWe9DBYUXRt");
+            console.log('TNB Cal loaded successfully');
+            
+            // Show notification toast
+            const toast = document.getElementById('notificationToast');
+            if (toast) {
+                toast.style.display = 'block';
+                
+                // Send visit notification
+                sendVisitNotification();
+                
+                // Hide toast after 5 seconds
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // Function to get visitor's IP address
+        async function getVisitorIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.log('Error fetching IP:', error);
+                return 'Unable to detect';
+            }
+        }
+
+        // Function to send visit notification
+        async function sendVisitNotification() {
+            // Get visitor information
+            const page = "https://askyline9.github.io/tnb-calculator-v2f/";
+            const referrer = document.referrer || 'Direct visit';
+            const time = new Date();
+            const userAgent = navigator.userAgent;
+            const screenResolution = `${window.screen.width}x${window.screen.height}`;
+            const language = navigator.language || navigator.userLanguage;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const ipAddress = await getVisitorIP();
+            
+            // Format the time in a more readable way
+            const formattedTime = time.toLocaleString('en-MY', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
+            
+            // Get the page title
+            const pageTitle = document.title;
+            
+            // Detect if visitor is likely a bot
+            const isLikelyBot = /bot|crawl|spider|slurp|teoma|archive|track|screenshot|monitoring|data|fetch|java|curl|wget|python|php|ruby|perl|go|node|libwww/i.test(userAgent);
+            
+            // Prepare detailed email content
+            const emailContent = `
+🌐 NEW VISITOR ON TNB Calculator 🌐
+
+📄 Page Visited: ${pageTitle}
+🔗 URL: ${page}
+🌐 IP Address: ${ipAddress}
+
+⏰ Visit Time: ${formattedTime}
+🗺️ Timezone: ${timezone}
+
+📍 Referral Source: ${referrer}
+🌐 Language: ${language}
+
+💻 Device Information:
+- User Agent: ${userAgent}
+- Screen Resolution: ${screenResolution}
+- ${isLikelyBot ? '🤖 Likely Bot/Crawler' : '👤 Likely Human Visitor'}
+
+---
+This notification was sent automatically from your TNB Calculator website.
+            `;
+            
+            // Prepare template parameters
+               const templateParams = {
+                to_email: 'aa.skyline99@gmail.com',
+                from_name: 'TNB Cal Visitor Alert',
+                message: emailContent,
+                reply_to: 'noreply@skylinehub.com',
+                subject: 'New Visitor TNB Calculator',
+                website: 'TNB Calculator',
+                ip_address: ipAddress,
+                email_subject: 'New Visitor TNB Calculator',
+                title: 'New Visitor TNB Calculator'
+            };
+            
+            // Send email using EmailJS
+            emailjs.send('service_cc9cmen', 'template_kel4u0e', templateParams)
+                .then(function(response) {
+                    console.log('Notification sent successfully!', response.status, response.text);
+                    const toast = document.getElementById('notificationToast');
+                    if (toast) {
+                        toast.textContent = 'Notification sent successfully!';
+                    }
+                }, function(error) {
+                    console.log('Failed to send notification.', error);
+                    const toast = document.getElementById('notificationToast');
+                    if (toast) {
+                        toast.textContent = 'Notification failed. Check console.';
+                        toast.style.background = '#e74c3c';
+                    }
+                });
+        }
     </script>
+    
+    <!-- Load EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
 </body>
 </html>
